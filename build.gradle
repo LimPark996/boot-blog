@@ -25,8 +25,9 @@ repositories {
 }
 
 dependencies {
-    // 일단 구동으로 위해...
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // - aiven님께 감사하도록 해... 그분이 풀어주셨어...
+    // - ai..ven...? 그가 날 감당할 수 있을까? (to be continued)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
