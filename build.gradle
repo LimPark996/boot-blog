@@ -16,6 +16,7 @@ java {
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
+        // lombok -> RequestParam 같은 애너테이션 -> 자동처리... 6.2.x
     }
 }
 
@@ -24,7 +25,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // 일단 구동으로 위해...
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
