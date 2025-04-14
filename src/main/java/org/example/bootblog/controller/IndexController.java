@@ -3,14 +3,13 @@ package org.example.bootblog.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller // Spring Context
-@RequestMapping("/diary")
-public class DiaryController {
+// @RequestMapping("/") // MVC
+public class IndexController {
     @GetMapping
-    public String form(Model model) {
-        model.addAttribute("message", "곧 함");
-        return "diary/form";
+    public String index(Model model) {
+        model.addAttribute("message", "James 사원, 이따가 회의실로...");
+        return "index";
     }
 }
