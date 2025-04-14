@@ -17,5 +17,7 @@ public class Diary {
     @Column(nullable = false, length = 2000)
     String content;
     @CreatedDate
-    LocalDateTime createdAt;
+    LocalDateTime createdAt = LocalDateTime.now(); // 아... TIL 하세요!
+    // TIL 나간다!
+    // https://g.co/gemini/share/2e2d01a6e463
 }
