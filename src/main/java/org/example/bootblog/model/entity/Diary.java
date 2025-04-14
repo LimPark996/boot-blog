@@ -16,6 +16,8 @@ public class Diary {
     String title;
     @Column(nullable = false, length = 2000)
     String content;
+    @Column(nullable = false, length = 2000)
+    String imageUrl;
     @CreatedDate
     LocalDateTime createdAt = LocalDateTime.now(); // 아... TIL 하세요!
     // TIL 나간다!
