@@ -1,3 +1,9 @@
 spring:
   application:
     name: boot-blog
+  profiles:
+    active: dev
+  security:
+    user:
+      name: hello
+      password: world
