@@ -30,12 +30,16 @@
         <a th:href="@{/diary}">목록 보기</a>
     </header>
     <section>
-        <form th:action="@{/diary/new}" th:object="${form}" th:method="post">
+<!--        <form th:action="@{/diary/new}" th:object="${form}" th:method="post">-->
+        <form th:action="@{/diary/new}" th:object="${form}" th:method="post" enctype="multipart/form-data">
             <label>
                 제목 : <input type="text" th:field="*{title}">
             </label>
             <label>
                 내용 : <textarea th:field="*{content}"></textarea>
+            </label>
+            <label>
+                이미지 : <input type="file" th:field="*{imageFile}">
             </label>
             <button>기록</button>
         </form>

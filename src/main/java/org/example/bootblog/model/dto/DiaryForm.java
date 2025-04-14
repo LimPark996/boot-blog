@@ -1,4 +1,6 @@
 package org.example.bootblog.model.dto;
 
-public record DiaryForm(String title, String content) {
+import org.springframework.web.multipart.MultipartFile;
+
+public record DiaryForm(String title, String content, MultipartFile imageFile) {
 }

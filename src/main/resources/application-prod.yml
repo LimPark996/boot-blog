@@ -14,10 +14,11 @@ spring:
     url: ${MYSQL_URL}
     username: ${MYSQL_USERNAME}
     password: ${MYSQL_PASSWORD}
-
+# 객체 스토리지 관련 설정
 aws:
   s3:
     bucketName: ${STORAGE_BUCKET_NAME}
     region: ${STORAGE_REGION}
+    url: ${STORAGE_URL}
     accessKey: ${STORAGE_AK}
     secretKey: ${STORAGE_SK}
