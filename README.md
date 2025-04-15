@@ -420,6 +420,35 @@ Diary result = diaryService.createDiary(diary);
 - `DiaryService.createDiary()` → `diaryRepository.save(diary)`  
 - JPA가 `insert into diary ...` 쿼리를 실행해서 DB에 저장함
 
+**✅✅ diary.setTitle(...)은 Diary에 메서드가 없어도 되는 이유**
+
+```java
+Diary diary = new Diary();
+diary.setTitle(...);
+diary.setContent(...);
+```
+
+📌 근거: @Data 어노테이션
+
+Diary 클래스에는 @Data가 붙어있죠:
+
+```java
+@Data
+```
+
+이건 Lombok이라는 라이브러리의 어노테이션이고, 다음을 자동으로 생성해줍니다:
+
+getTitle(), setTitle(String title)
+
+getContent(), setContent(String content)
+
+toString()
+
+equals() / hashCode()
+
+getUuid() 등등...
+
+🔁 즉, 직접 setTitle()을 작성하지 않아도, 컴파일 시점에 자동으로 생성되기 때문에 사용할 수 있는 거예요.
 
 **📍5. [서버] Redirect 처리**
 
@@ -431,6 +460,35 @@ return "redirect:/diary";
 - 글 작성 성공 시, UUID를 성공 메시지로 넘김  
 - 다시 리스트 페이지(`/diary`)로 리디렉션됨
 
+**✅✅ return "redirect:/diary"인데 .html이 없는 이유**
+
+```java
+return "redirect:/diary";
+```
+
+📌 여기서 "redirect:/diary"는 HTML 파일 이름이 아니라 URL 경로입니다.
+
+**🔁 동작 흐름**
+
+"redirect:/diary" → Spring MVC가 강제로 URL로 리다이렉트시켜요
+
+브라우저는 GET /diary 요청을 다시 서버에 보냅니다
+
+그러면 이 메서드가 실행됨:
+
+```java
+@GetMapping("/diary")
+public String list(Model model) {
+    ...
+    return "diary/list";
+}
+```
+
+🔽 이 메서드는 실제로 아래 템플릿을 렌더링하게 돼요:
+
+```bash
+templates/diary/list.html
+```
 ---
 
 **🧠 그림으로 정리: 시퀀스 다이어그램**
