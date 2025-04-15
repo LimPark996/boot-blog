@@ -80,9 +80,9 @@ public class DiaryController {
 ---
 ---
 
-**✅ 사용자가 브라우저에서 `/` 접속했을 때**
+**✅ 1. 사용자가 브라우저에서 `/` 접속했을 때**
 
-**🔹 1. 사용자의 요청**
+**🔹 ① 사용자의 요청**
 
 ```http
 GET /
@@ -92,7 +92,7 @@ GET /
 
 ---
 
-**🔹 2. IndexController 동작**
+**🔹 ② IndexController 동작**
 
 ```java
 @Controller
@@ -113,7 +113,7 @@ public class IndexController {
 
 ---
 
-**🔹 3. 뷰 템플릿 렌더링**
+**🔹 ③ 뷰 템플릿 렌더링**
 
 ```html
 <!-- templates/index.html -->
@@ -126,7 +126,7 @@ public class IndexController {
 
 ---
 
-**🔹 4. 브라우저에 최종적으로 보여지는 HTML**
+**🔹 ④ 브라우저에 최종적으로 보여지는 HTML**
 
 ```html
 <p>James 사원, 이따가 회의실로...</p>
@@ -163,3 +163,100 @@ Client (브라우저)
 | `Model`               | 화면에 보여줄 메시지 담고 |
 | `return "index"`      | `index.html` 템플릿을 리턴 |
 | `th:text`             | 전달받은 데이터를 HTML에 출력 |
+
+---
+---
+**✅ 2. `/diary` 경로 요청 → 일지 목록 출력 흐름**
+
+---
+
+**🔁 전체 흐름 (End-to-End)**
+
+**① 사용자가 `/diary`로 이동**
+
+→ 예: 브라우저에서 `/diary` 주소를 직접 입력하거나, `/`에 있는 "일지" 링크를 클릭
+
+**② 서버로 GET 요청 전송**
+
+```http
+GET /diary HTTP/1.1
+```
+
+**③ `DiaryController`가 요청을 처리**
+
+```java
+@GetMapping
+public String list(Model model) {
+    model.addAttribute("message", "리스트임다");
+    model.addAttribute("list", diaryService.getAllDiaryList());
+    return "diary/list";
+}
+```
+
+- `message`에 `"리스트임다"`라는 문자열을 담고
+- `list`에는 `diaryService.getAllDiaryList()` 결과 (DB에 저장된 일지 목록)를 담음
+
+**④ `DiaryService` → `DiaryRepository` → DB 조회**
+
+```java
+public List<Diary> getAllDiaryList() {
+    return diaryRepository.findAll();
+}
+```
+
+- JPA가 자동으로 SQL을 날려 DB에서 모든 `Diary` 레코드를 조회함  
+→ `select * from diary`
+
+**⑤ 조회된 일지 리스트가 Thymeleaf 뷰로 전달됨**
+
+뷰 템플릿: `src/main/resources/templates/diary/list.html`
+
+```html
+<ol>
+    <li th:each="diary : ${list}">
+        <p th:text="${diary}"></p>
+    </li>
+</ol>
+```
+
+- 전달된 `list`를 반복하면서 `<li>` 안에 하나씩 보여줌
+
+**⑥ 최종적으로 브라우저에 아래와 같이 렌더링됨 (예시)**
+
+```html
+<p>리스트임다</p>
+
+<ol>
+  <li>
+    Diary(uuid=..., title=오늘의 일기, content=힘들었어요, imageUrl=..., createdAt=...)
+  </li>
+  <li>
+    Diary(uuid=..., title=개발일지, content=SpringBoot 처음 써봄, imageUrl=..., createdAt=...)
+  </li>
+</ol>
+```
+
+(Thymeleaf 기본 toString() 출력이라, 엔티티 필드들이 한 줄로 나옴)
+
+---
+
+**🧭 시퀀스 다이어그램**
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Browser
+    participant Server
+    participant DB
+
+    Client->>Browser: /diary 링크 클릭
+    Browser->>Server: GET /diary
+    Server->>DiaryService: getAllDiaryList()
+    DiaryService->>DiaryRepository: findAll()
+    DiaryRepository->>DB: select * from diary
+    DB-->>DiaryRepository: 전체 일지 리스트 반환
+    DiaryRepository-->>DiaryService: List<Diary>
+    DiaryService-->>Server: List<Diary>
+    Server-->>Browser: list.html 렌더링 (일지 목록 출력)
+```
+
